@@ -4,7 +4,11 @@ var app = express();
 var path = require('path');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-
+var methodOverride = require('method-override');
+var passport = require('passport');
+var session = require('express-session');
+var flash = require('connect-flash');
+var async = require('async');
 // connect database
 mongoose.connect(process.env.MONGO_DB);
 var db = mongoose.connection;
@@ -30,16 +34,15 @@ app.set("view engine", 'ejs');
 
 // set middlewares
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(methodOverride('_method'));
 //바디 파서를 제이슨형식으로
 //set routes
 app.get('/posts', function(req,res){
-  Post.find({}, function (err,posts) {
+  Post.find({}).sort('createdAt').exec(function(err,posts){
     if(err) return res.json({success:false, message:err});
-    //제이슨 형식으로 응답
-    res.json({success:true, data:posts});
-    //제이슨형식으로 응답
-  });
+    res.render('posts/index', {data:posts});
+  });    //제이슨형식으로 응답
 }); // index
 app.post('/posts', function(req,res){
   Post.create(req.body.post,function (err,post) {
@@ -47,20 +50,28 @@ app.post('/posts', function(req,res){
     if(err) return res.json({success:false, message:err});
     //응답한다 제이슨 형식으로
     //데이터베이스를 새로 만들면 id가 생성된다.(primary key)
-    res.json({success:true, data:post});
+    res.redirect('/posts');
     //응답한다 제이슨 형식으로
   });
+});
+app.get('/posts/new',function(req,res){
+  res.render('posts/new');
 });
 app.get('/posts/:id', function(req,res){
   //생성된 id를 찾는다.
   Post.findById(req.params.id, function (err,post) {
     //데이터베이스에서 요청하는 id를 찾는다.(응답하는 id로 값을 넣었다.)
     if(err) return res.json({success:false, message:err});
-    res.json({success:true, data:post});
+    res.render('posts/show',{data:post});
     //success는 true로 ,data는 post값으로 json으로 응답한다
   });
 }); // show
-
+app.get('/posts/:id/edit',function(req,res){
+  Post.findById(req.params.id,function(err,post){
+    if(err) return res.json({success:false,message:err});
+    res.render('posts/edit',{data:post});
+  });
+});
 //put은 업데이트 db 업데이트 => findByIdAndUpdate
 app.put('/posts/:id', function(req,res){
   req.body.post.updatedAt=Date.now();
@@ -68,13 +79,13 @@ app.put('/posts/:id', function(req,res){
   Post.findByIdAndUpdate(req.params.id, req.body.post, function (err,post) {
     //찾는 id ,수정할 데이터, 실행
     if(err) return res.json({success:false, message:err});
-    res.json({success:true, message:post._id+" updated"});
+    res.redirect('/posts/'+req.params.id);
   });
 }); //update
 app.delete('/posts/:id', function(req,res){
   Post.findByIdAndRemove(req.params.id, function (err,post) {
     if(err) return res.json({success:false, message:err});
-    res.json({success:true, message:post._id+" deleted"});
+    res.redirect('/posts');
   });
 }); //destroy
 //start server

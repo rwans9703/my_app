@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <% include ../partials/head %>
+  </head>
+  <body>
+    <% include partials/top%>
+    <!--메인 시작점-->
+    <div class="new">
+      <div class="posts">
+      <h3>New Post</h3>
+      <form class="posts_form" action="/posts/<%=data._id%>?_method=put" method="post">
+        <label>title</label>
+        <input type="text" name="post[title]" value="<%= data.title%>">
+        <label>body</label>
+        <textarea name="post[body]"><%= data.body%></textarea>
+        <button type="submit">Submit</button>
+      </form>
+      <a href="javascript:history.back()"><button>Back</button></a>
+      </div>
+    </div>
+    <!--메인 끝점-->
+    <div>
+      <footer>
+        <% include ../partials/footer %>
+      </footer>
+    </div>
+  </body>
+</html>
