@@ -5,14 +5,14 @@
     <% include ../partials/head %>
   </head>
   <body>
-    <% include partials/top%>
+    <% include ../partials/header %>
     <!--메인 시작점-->
     <div class="show">
       <h3>User Info</h3>
       <div class="content">
         <p class='user_info'>Email <small>: <%=user.email%></small></p>
-        <p class='user_info'>Nickname <small>: <%=user.Nickname%></small></p>
-        <p class='user_info'>Password <small>: <%=user.Password%></small></p>
+        <p class='user_info'>Nickname <small>: <%=user.nickname%></small></p>
+        <p class='/user/<%=user._id%>/edit'><button>Edit</button></p>
       </div>
       <a href="/"><button>Back</button></a>
     </div>

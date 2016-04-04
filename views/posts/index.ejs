@@ -1,38 +1,45 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
     <% include ../partials/head %>
   </head>
   <body>
-    <% include partials/top%>
-    <!--메인 시작점-->
-    <div class="index">
-      <div class="posts">
-      <a href="/posts/new"><button>New</button></a>
-      <%if(user){%>
-        <a href="/logout" class='float_right'><button>Logout</button></a>
-        <a href="/user/<%=user._id%>" class='float_right'><button>My Profile (<%= user.nickname%>)</button></a>
-      <%}else{%>
-        <a href="/login" class='float_right'><button>login</button></a>
-        <a href="/users/new" class='float_right'><button>Sign Up</button></a>
-      <%}%>
-      <ul>
-          <li class='header'>title <span>date</span></li>
-      <% data.forEach(function(e){%>
-        <li>
-          <a href="/posts/<%= e._id%>"><%= e.title %></a>
-          <span><%= e.createdAt.toLocaleDateString() %></span>
-        </li>
-      <%})%>
-      </ul>
-      </div>
-    </div>
-    <!--메인 끝점-->
-    <div>
-      <footer>
-        <% include ../partials/footer %>
-      </footer>
-    </div>
+    <header>
+      <% include ../partials/header %>
+    </header>
+    <div class="posts">
+    <% include partials/top %>
+<!-- main start-->
+
+<!-- views/posts/index.ejs -->
+<div class="index">
+  <a href="/posts/new"><button>New</button></a>
+  <% if(user) {%>
+    <a href="/logout" class="float_right"><button>Logout</button></a>
+    <a href="/users/<%= user._id %>" class="float_right"><button>My Profile (<%= user.nickname %>)</button></a>
+  <% } else { %>
+    <a href="/login" class="float_right"><button>Login</button></a>
+    <a href="/users/new" class="float_right"><button>Sign Up</button></a>
+  <% } %>
+  <ul>
+      <li class="header"> Title
+        <span class='float_right'>Date</span>
+        <span class='float_right'>Author</span>
+      </li>
+    <% data.forEach(function(e){ %>
+      <li>
+        <a href="/posts/<%= e._id %>"><%= e.title %></a>
+        <span class='float_right'><%= e.createdAt.toLocaleDateString() %></span>
+        <span class='float_right'><%= e.nickname %></span>
+      </li>
+    <% }) %>
+  </ul>
+</div>
+
+<!-- main end -->
+    </div><!--posts end -->
+    <footer>
+      <% include ../partials/footer %>
+    </footer>
   </body>
 </html>
