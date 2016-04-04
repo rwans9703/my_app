@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <% include ../partials/head %>
+  </head>
+  <body>
+    <% include partials/top%>
+    <!--메인 시작점-->
+    <div class="users">
+      <div class="new">
+        <h3>Sign Up</h3>
+        <form id='create_user' class="users_form" action="/users" method="post">
+          <label>Email*<span id='email_error' class='error_message'><%= emailError?emailError:""%></span></label>
+          <input type="text" id='email' name="user[email]" value='<%= formData?formData.email:""%>'>
+          <label>NickName* <span id='nickname_Error' class='error_message'><%= nicknameError?nicknameError:""%></span></label>
+          <input type="text" id='nickname_error' name="user[nickname]" value="<%= formData?formData.nickname:""%>">
+          <label>Password*<span id='password_error' class='error_message'><%= passwordError?passwordError:""%></span></label>
+          <input type="text" id='password' name="user[password]" value="">
+          <label>Password Confirmation*<span id='password_confirmation_error' class='error_message'></span></label>
+          <input type="text" id='password_confirmation' name="user[passwordConfirmation]" value="">
+          <p>
+            <small>*Required</small>
+          </p>
+          <input type="buttom" class='submit_btn' name="name" value="Submit">
+        </form>
+        <a href="javascript:history.back()"><button>Back</button></a>
+      </div>
+      <script type="text/javascript" src='/js/userform.js'></script>
+    </div>
+    <!--메인 끝점-->
+    <div>
+      <footer>
+        <% include ../partials/footer %>
+      </footer>
+    </div>
+  </body>
+</html>

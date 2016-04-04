@@ -10,6 +10,13 @@
     <div class="index">
       <div class="posts">
       <a href="/posts/new"><button>New</button></a>
+      <%if(user){%>
+        <a href="/logout" class='float_right'><button>Logout</button></a>
+        <a href="/user/<%=user._id%>" class='float_right'><button>My Profile (<%= user.nickname%>)</button></a>
+      <%}else{%>
+        <a href="/login" class='float_right'><button>login</button></a>
+        <a href="/users/new" class='float_right'><button>Sign Up</button></a>
+      <%}%>
       <ul>
           <li class='header'>title <span>date</span></li>
       <% data.forEach(function(e){%>
